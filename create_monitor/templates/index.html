@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Monitor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Monitor from Prompt</h1>
+        <form method="post">
+            <label for="prompt">Enter your prompt:</label>
+            <input type="text" id="prompt" name="prompt" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.querySelector('#prompt-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const prompt = document.querySelector('#prompt').value;
+
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ 'prompt': prompt })
+            });
+            
+            const data = await response.json();
+            document.querySelector('#result').textContent = JSON.stringify(data);
+        };
+    </script>
+</body>
+</html>
