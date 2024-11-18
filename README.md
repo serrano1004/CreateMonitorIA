@@ -2,8 +2,8 @@
 Creando monitores a partir de prompts.
 
 ## 1. Configuración Inicial
-- Instalación de Prometheus y Grafana: 
- - Configura Prometheus con los targets que quieres monitorear (p. ej., servidores, aplicaciones, o contenedores) en el archivo prometheus.yml.
+Instalación de Prometheus y Grafana: 
+- Configura Prometheus con los targets que quieres monitorear (p. ej., servidores, aplicaciones, o contenedores) en el archivo prometheus.yml.
 
 ```bash
 global:
@@ -21,10 +21,7 @@ docker network create monitoring
 docker run -d --name prometheus --network monitoring -p 9090:9090 -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 docker run -d --name=grafana -p 3000:3000 --network monitoring grafana/grafana
 ```
-
- 
-
-- Integración de Grafana con Prometheus:
+Integración de Grafana con Prometheus:
  - Abre Grafana en tu navegador en http://localhost:3000 (ajusta la URL según tu configuración).
  - Inicia sesión (la configuración predeterminada suele ser usuario admin y contraseña admin en instalaciones nuevas).
  - En Grafana, añade Prometheus como fuente de datos (Settings > Data Sources > Add data source > selecciona Prometheus).
@@ -41,15 +38,15 @@ Aquí te detallo el proceso para asegurarte de que el servicio expone las métri
 Verifica si tu servicio ya expone métricas:
 - Algunos servicios y aplicaciones ya vienen con un endpoint /metrics configurado para Prometheus. Por ejemplo, algunos servidores web, bases de datos y servicios de nube ofrecen métricas en /metrics.
 - Si tu servicio no expone métricas en esta URL, tendrás que hacer uno de los siguientes pasos:
- - Incorporar un cliente de Prometheus en el código de tu aplicación.
- - Utilizar un exportador para convertir las métricas de tu servicio al formato Prometheus.
+ 1. Incorporar un cliente de Prometheus en el código de tu aplicación.
+ 2. Utilizar un exportador para convertir las métricas de tu servicio al formato Prometheus.
 
 Prueba el Endpoint:
-- Accede a http://<tu_servicio>:<puerto>/metrics en tu navegador o usando curl para verificar si se exponen las métricas. Por ejemplo:
+Accede a http://<tu_servicio>:<puerto>/metrics en tu navegador o usando curl para verificar si se exponen las métricas. Por ejemplo:
 ```bash
 curl http://localhost:9090/metrics
 ```
-- Si el endpoint está configurado correctamente, deberías ver una lista de métricas en formato de texto plano, como este ejemplo:
+Si el endpoint está configurado correctamente, deberías ver una lista de métricas en formato de texto plano, como este ejemplo:
 ```bash
 # HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
 # TYPE go_gc_duration_seconds summary
@@ -68,12 +65,12 @@ Si tu aplicación no tiene soporte para Prometheus, puedes integrar un cliente d
 
 Ejemplo: Configurar un Cliente de Prometheus en Python
 Este ejemplo en Python muestra cómo usar la biblioteca prometheus_client para exponer métricas en /metrics:
-- Instala la biblioteca:
+Instala la biblioteca:
 ```bash
 pip install prometheus_client
 ```
-- Código para exponer métricas:
- - Configura el cliente para recolectar y exponer métricas en /metrics.
+Código para exponer métricas:
+- Configura el cliente para recolectar y exponer métricas en /metrics.
 ```Python
 from prometheus_client import start_http_server, Summary
 import random
@@ -93,7 +90,7 @@ if __name__ == '__main__':
     while True:
         process_request()
 ```
-- Este script expone las métricas en http://localhost:8000/metrics.
+Este script expone las métricas en http://localhost:8000/metrics.
 
 ## 2. Procesamiento del Prompt
 ### 2.1 Herramienta de Procesamiento de Lenguaje Natural (NLP):
@@ -102,23 +99,23 @@ if __name__ == '__main__':
 - Ejemplo de prompt: "Crea un monitor de CPU que alerte cuando el uso supere el 80% durante 5 minutos."
 
 #### 2.1.1 Configuración del Entorno de Desarrollo
- 1. Instala las Dependencias:
- - Necesitarás instalar las siguientes herramientas:
-  - Python: Lenguaje para manejar la lógica del procesamiento.
-  - Flask: Para crear una interfaz web simple.
-  - NLTK o spaCy: Para el procesamiento de lenguaje natural.
-  - Prometheus Client: Para gestionar las métricas.
- - Ejecuta: 
+Instala las Dependencias:
+1. Necesitarás instalar las siguientes herramientas:
+ - Python: Lenguaje para manejar la lógica del procesamiento.
+ - Flask: Para crear una interfaz web simple.
+ - NLTK o spaCy: Para el procesamiento de lenguaje natural.
+ - Prometheus Client: Para gestionar las métricas.
+2. Ejecuta: 
 ```bash 
 pip install flask spacy prometheus_client
 ```
- - Si eliges spaCy para el procesamiento NLP, asegúrate de descargar el modelo de lenguaje:
+3. Si eliges spaCy para el procesamiento NLP, asegúrate de descargar el modelo de lenguaje:
 ```bash 
 python -m spacy download en_core_web_sm
 ```
- 2. Diseñar la Interfaz de Usuario en Flask
+Diseñar la Interfaz de Usuario en Flask
  - Crea una interfaz web donde se pueda introducir el prompt. Este prompt debe ser una oración en lenguaje natural que describe la métrica y las condiciones de alerta.
-  - Crear la Estructura del Proyecto:
+ - Crear la Estructura del Proyecto:
 ```bash
   create_monitor/
 ├── app.py
@@ -127,12 +124,12 @@ python -m spacy download en_core_web_sm
 └── static/
     └── style.css
 ```
- 3. Interpretar el Prompt en Datos para Prometheus
+Interpretar el Prompt en Datos para Prometheus
  - Procesar el Prompt:
-  - Usa el modelo spaCy cargado para extraer entidades clave como el nombre de la métrica, el umbral, y la condición (por encima o por debajo del umbral).
-  - Por ejemplo, si el prompt es "Alert me if CPU usage goes above 80%", el código extraerá "CPU usage" como métrica, 80 como umbral, y above como condición.
+  1. Usa el modelo spaCy cargado para extraer entidades clave como el nombre de la métrica, el umbral, y la condición (por encima o por debajo del umbral).
+  2. Por ejemplo, si el prompt es "Alert me if CPU usage goes above 80%", el código extraerá "CPU usage" como métrica, 80 como umbral, y above como condición.
  - Crear la Estructura de Datos:
-  - La función process_prompt convierte el prompt en un diccionario
+  1. La función process_prompt convierte el prompt en un diccionario
 ```json
 {
   "metric_name": "CPU usage",
@@ -140,27 +137,22 @@ python -m spacy download en_core_web_sm
   "alert_condition": "above"
 }
 ```
- 4. Almacenar y Gestionar las Métricas en Prometheus
+Almacenar y Gestionar las Métricas en Prometheus
  - Crear Métrica en Prometheus:
-  - Usa la biblioteca prometheus_client para definir una métrica con el nombre extraído:
+  1. Usa la biblioteca prometheus_client para definir una métrica con el nombre extraído:
 ```Python
 if metric_name not in metrics:
     metrics[metric_name] = Gauge(metric_name, f'Métrica para {metric_name}')
 ```
  - Establecer Condiciones de Alerta:
-  - A partir de aquí, podrás configurar una alerta en Prometheus usando esta métrica y las condiciones de alerta definidas en el prompt.
+  1. A partir de aquí, podrás configurar una alerta en Prometheus usando esta métrica y las condiciones de alerta definidas en el prompt.
  - Probar el Sistema:
-  - Ejecuta el servidor Flask y prueba el prompt desde la interfaz web en http://localhost:5000.
-  - Envía distintos prompts y verifica si los datos se procesan correctamente.
-
-
-
-
+  1. Ejecuta el servidor Flask y prueba el prompt desde la interfaz web en http://localhost:5000.
+  2. Envía distintos prompts y verifica si los datos se procesan correctamente.
 
 ### 2.2 Extracción de Parámetros del Prompt:
 - Define un script para extraer los detalles específicos del prompt (métrica, umbrales, duración, etc.).
 - Código de ejemplo en Python para procesar el prompt:
-
 ```Python
 import openai
 
@@ -172,7 +164,7 @@ def process_prompt(prompt):
     )
     return response["choices"][0]["text"]
 ```
-  - Configura OpenAI para interpretar y mapear frases como "alerta de CPU" a metric: cpu_usage, "80%" a threshold: 80, y "5 minutos" a duration: 5m.
+- Configura OpenAI para interpretar y mapear frases como "alerta de CPU" a metric: cpu_usage, "80%" a threshold: 80, y "5 minutos" a duration: 5m.
 
 ## 3. Generación de Configuración para Prometheus
 ### 3.1 Mapeo de Prompt a Configuración YAML
