@@ -1,51 +1,48 @@
+from openai import OpenAI
+
+client = OpenAI(api_key="TU-API-KEY")
+
+  # Asegúrate de usar tu clave API
+
 from flask import Flask, request, render_template, jsonify
-import spacy
-from prometheus_client import Gauge
+
+# Configuración de la clave API de OpenAI
+  # Reemplaza esto con tu clave API
 
 app = Flask(__name__)
-nlp = spacy.load("en_core_web_sm")
-metrics = {}
 
+app = Flask(__name__)
+
+# Función para procesar el prompt con OpenAI
 def process_prompt(prompt):
-    doc = nlp(prompt)
-    metric_name = None
-    threshold = None
-    alert_condition = None
+    try:
+        # Realizamos la solicitud a la API de OpenAI usando el endpoint de chat
+        response = client.chat.completions.create(model="gpt-3.5-turbo",  # O usa "gpt-4" si tienes acceso
+        messages=[
+            {"role": "system", "content": "Eres experto en Graffana y Prometheus. Además de experto en json y python y yaml. Todas las respuestas que me des las quiero formateadas en json sacando los parametros necesarios para que las entienda la API de grafana y prometheus y me cree el monitor."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=150,
+        temperature=0.7)
 
-    # Nuevas palabras clave para el procesamiento
-    alert_keywords = ['latency', 'cpu', 'memory', 'use']
-    condition_keywords = ['above', 'exceed', 'more', 'below']
+        # Obtén el texto de la respuesta
+        ia_result = response.choices[0].message.content.strip()
 
-    for token in doc:
-        if token.text.lower() in alert_keywords:
-            metric_name = token.text
-        elif token.pos_ == "NUM":
-            threshold = float(token.text)
-        elif token.text.lower() in condition_keywords:
-            alert_condition = token.text
+        return {"result": ia_result}
 
-    if metric_name and threshold and alert_condition:
-        return {
-            "metric_name": metric_name,
-            "threshold": threshold,
-            "alert_condition": alert_condition
-        }
-    else:
-        print("No se pudo interpretar el prompt.")
-        return None
+    except Exception as e:
+        print(f"Error al procesar el prompt con OpenAI: {e}")
+        return {"error": "Ocurrió un error al procesar el prompt con OpenAI"}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         prompt = request.form.get('prompt')  # Usa get() para evitar el KeyError
         if prompt:
-            result = process_prompt(prompt)
-            if result:
-                return jsonify(result)
-            else:
-                return jsonify({"error": "No se pudo interpretar el prompt"}), 400
+            result = process_prompt(prompt)  # Llama al servicio de OpenAI para procesar el prompt
+            return jsonify(result)  # Devolvemos el JSON con la respuesta procesada
         else:
-            return jsonify({"error": "Prompt no recibido"}), 400
+            return jsonify({"error": "Prompt not received"}), 400
 
     return render_template('index.html')
 
