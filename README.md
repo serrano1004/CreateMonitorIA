@@ -96,7 +96,7 @@ Este script expone las métricas en http://localhost:8000/metrics.
 ### 2.1 Herramienta de Procesamiento de Lenguaje Natural (NLP):
 - Utiliza un modelo NLP (como OpenAI o spaCy) para interpretar el prompt.
 - Si optas por OpenAI, puedes usar su API para convertir prompts en estructuras de datos JSON que representen las métricas y configuraciones deseadas.
-- Ejemplo de prompt: "Crea un monitor de CPU que alerte cuando el uso supere el 80% durante 5 minutos."
+- Ejemplo de prompt: "Create a CPU monitor that alerts when usage exceeds 80% for 5 minutes."
 
 #### 2.1.1 Configuración del Entorno de Desarrollo
 Instala las Dependencias:

@@ -1,0 +1,47 @@
+{
+  "dashboard": {
+    "uid": "alert-dashboard",
+    "title": "High CPU Alert Dashboard",
+    "panels": [
+      {
+        "title": "CPU Usage Alert",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100",
+            "refId": "A"
+          }
+        ],
+        "alert": {
+          "name": "High CPU Usage",
+          "message": "CPU usage is above 80%",
+          "conditions": [
+            {
+              "evaluator": {
+                "type": "gt",
+                "params": [80]
+              },
+              "reducer": {
+                "type": "avg",
+                "params": []
+              },
+              "operator": {
+                "type": "and"
+              }
+            }
+          ],
+          "noDataState": "no_data",
+          "notifications": [
+            {
+              "type": "email",
+              "sendReminder": false,
+              "frequency": "60s"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}

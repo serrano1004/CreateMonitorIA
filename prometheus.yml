@@ -1,7 +1,15 @@
 global:
-  scrape_interval: 15s  # Intervalo para capturar métricas
+  scrape_interval: 5s  # Intervalo para capturar métricas
 
 scrape_configs:
-  - job_name: "monitoring"
+  - job_name: 'docker'
     static_configs:
-      - targets: ["localhost:9090"]  # Cambia esto a la URL del servicio que quieres monitorear
+      - targets: ['172.17.0.21:9104']  # IP del contenedor donde corre docker_exporter (o cAdvisor)
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['172.27.164.211:9104']  # Exportador de node_exporter (si lo tienes en tu PC o WSL2)
+  
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090/metrics']
