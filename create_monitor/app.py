@@ -1,17 +1,23 @@
 from openai import OpenAI
+from dotenv import load_dotenv
 import requests
 import json
+import os
 
-client = OpenAI(api_key="")
+
+# Carga las claves desde el archivo .env
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GRAFANA_API_TOKEN = os.getenv("GRAFANA_API_TOKEN")
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 GRAFANA_API_URL = "http://localhost:3000/api/dashboards/db"  # Reemplaza <GRAFANA_HOST> con la URL de tu Grafana
-GRAFANA_API_TOKEN = ""  # Inserta aquí tu token de Grafana
 
-  # Asegúrate de usar tu clave API
+if not OPENAI_API_KEY or not GRAFANA_API_TOKEN:
+    raise ValueError("API keys not found in environment variables!")
 
 from flask import Flask, request, render_template, jsonify
-
-# Configuración de la clave API de OpenAI
-  # Reemplaza esto con tu clave API
 
 app = Flask(__name__)
 
@@ -74,6 +80,11 @@ def create_monitor_in_grafana(alert_json):
         threshold = alert_json["threshold"]
         alert_name = alert_json["alert_name"]
         notification = alert_json["notification"]
+
+        # Truncate the message to a maximum of 40 characters
+        notification_message = notification.get("message", "Default alert message")
+        if len(notification_message) > 40:
+            notification_message = notification_message[:37] + "..."
 
         # Build the Grafana dashboard
         dashboard = {
