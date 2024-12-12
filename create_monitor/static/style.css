@@ -1,32 +1,33 @@
-/* General page styles */
+/* Estilo general del cuerpo */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #f4f4f9; /* Color de fondo claro */
     margin: 0;
     padding: 0;
-    display: flex;
+    display: flex; /* Centramos el contenido */
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100vh; /* Altura completa de la pantalla */
 }
 
+/* Contenedor principal */
 .container {
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
     padding: 30px;
-    width: 400px;
-    text-align: center;
+    width: 400px; /* Ancho fijo */
+    text-align: center; /* Centrado de texto */
 }
 
-/* Title style */
+/* Estilo del título */
 h1 {
     color: #333;
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-/* Form elements styling */
+/* Estilo de la etiqueta */
 label {
     font-size: 16px;
     color: #555;
@@ -34,39 +35,43 @@ label {
     margin-bottom: 10px;
 }
 
+/* Estilo del campo de entrada */
 input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
+    width: 100%; /* Ancho completo */
+    padding: 12px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de letra */
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    box-sizing: border-box; /* Ajusta el tamaño al contenedor */
 }
 
+/* Estilo del botón */
 button {
-    width: 100%;
+    width: 100%; /* Ancho completo */
     padding: 12px;
-    background-color: #007bff;
-    color: white;
+    background-color: #007bff; /* Color azul */
+    color: white; /* Texto blanco */
     border: none;
-    border-radius: 5px;
+    border-radius: 5px; /* Bordes redondeados */
     font-size: 16px;
-    cursor: pointer;
+    cursor: pointer; /* Cambia el cursor a "mano" */
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
 }
 
-/* Result styling */
 #result {
     margin-top: 20px;
     font-size: 14px;
     color: #333;
-    background-color: #e9ecef;
+    background-color: #e9ecef; /* Fondo gris claro */
     padding: 15px;
     border-radius: 5px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    white-space: pre-wrap; /* Mantiene saltos de línea */
+    word-wrap: break-word; /* Ajusta palabras largas */
+    max-height: 200px; /* Altura máxima para scroll */
+    overflow-y: auto; /* Activa scroll si el contenido es muy grande */
+    border: 1px solid #ccc; /* Borde suave */
 }

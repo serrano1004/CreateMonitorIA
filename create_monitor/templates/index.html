@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Create Monitor from Prompt</h1>
-        <form method="post">
+        <form id="prompt-form">
             <label for="prompt">Enter your prompt:</label>
             <input type="text" id="prompt" name="prompt" required>
             <button type="submit">Submit</button>
@@ -18,18 +18,36 @@
     </div>
     <script>
         document.querySelector('#prompt-form').onsubmit = async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Evita la recarga de la página
+    
             const prompt = document.querySelector('#prompt').value;
-
-            const response = await fetch('/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ 'prompt': prompt })
-            });
-            
-            const data = await response.json();
-            document.querySelector('#result').textContent = JSON.stringify(data);
+    
+            try {
+                // Envía la solicitud POST al servidor
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ 'prompt': prompt })
+                });
+    
+                // Procesa la respuesta
+                if (!response.ok) {
+                    throw new Error('Error in request to server');
+                }
+    
+                const data = await response.json(); // Convierte la respuesta a JSON
+    
+                // Muestra el resultado en el contenedor #result
+                document.querySelector('#result').textContent = JSON.stringify(data, null, 2);
+    
+                // Estilos adicionales para el resultado
+                document.querySelector('#result').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                document.querySelector('#result').textContent = 'An error occurred. Please try again.';
+            }
         };
     </script>
+    
 </body>
 </html>
