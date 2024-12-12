@@ -1,0 +1,43 @@
+{
+    "dashboard": {
+      "uid": "alert-dashboard",
+      "title": "Alert Dashboard",
+      "panels": [
+        {
+          "title": "CPU Usage Alert",
+          "type": "graph",
+          "alert": {
+            "name": "High CPU Usage",
+            "conditions": [
+              {
+                "evaluator": {
+                  "params": [20],
+                  "type": "lt"
+                },
+                "operator": {
+                  "type": "and"
+                },
+                "query": {
+                  "params": ["A", "5m", "now"]
+                },
+                "reducer": {
+                  "type": "avg"
+                },
+                "type": "query"
+              }
+            ],
+            "for": "5m"
+          },
+          "targets": [
+            {
+              "expr": "avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100",
+              "refId": "A",
+              "datasource": "Prometheus"
+            }
+          ]
+        }
+      ]
+    },
+    "overwrite": true
+  }
+  
