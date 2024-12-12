@@ -166,3 +166,13 @@ def process_prompt(prompt):
 ```
 - Configura OpenAI para interpretar y mapear frases como "alerta de CPU" a metric: cpu_usage, "80%" a threshold: 80, y "5 minutos" a duration: 5m.
 
+## 3. Ejemplo de prompts
+
+### 3.1 Monitoreo del tiempo de inicio de un proceso: 
+- "Generate a Prometheus query to monitor the time taken to start a specific process running on the instance localhost:9090. Use the appropriate metric name and filter by the instance and process labels."
+### 3.2 Monitoreo de la tasa de errores en consultas de base de datos:
+- "Generate a Prometheus query to monitor the error rate for database queries for a service running on the instance localhost:9090. Use the appropriate metric name and filter by the instance and database labels."
+### 3.3 Monitoreo de reinicios de contenedores:
+- "Generate a Prometheus query to monitor the number of restarts for Docker containers running on the instance localhost:9090. Use the appropriate metric name and filter by the container and instance labels."
+### 3.4 Monitoreo de la disponibilidad de una aplicación:
+- "Generate a Prometheus query to monitor the uptime of a service running on the instance localhost:9090. Use the appropriate metric name and filter by the instance label."
